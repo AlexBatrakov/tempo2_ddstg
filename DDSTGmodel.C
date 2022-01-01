@@ -72,6 +72,7 @@ double DDSTGmodel(pulsar *psr,int p,int ipos,int param)
     double bare_m, bare_m1, bare_m2;
     double dk_dm, dk_dm2, dgamma_dm, dgamma_dm2, dsi_dm, dsi_dm2, ddr_dm, ddr_dm2, ddth_dm, ddth_dm2, dpbdot_dm, dpbdot_dm2, ddt_dm, ddt_dm2;
     double epsNum, tt, frb, delta, delta_old, diff, ae1, cae, sae, psi, cpsi, spsi, dRoe, dEin, dSha, dAbe;
+    int NITS;
 
     if (displayCVSversion == 1) CVSdisplayVersion("DDSTGmodel.C","DDSTGmodel()",CVS_verNum);
 
@@ -261,8 +262,10 @@ double DDSTGmodel(pulsar *psr,int p,int ipos,int param)
 
     epsNum = 1.0e-10;
     delta  = 0.0;
+    NITS = 0;
     do
-    {
+    {   
+        NITS += 1;
         delta_old = delta;        
         tt  = tt0 - delta;
         orbits = tt*frb - 0.5*(pbdot+xpbdot)*pow(tt*frb,2);
@@ -330,7 +333,7 @@ double DDSTGmodel(pulsar *psr,int p,int ipos,int param)
         delta = dRoe + dEin + dSha + dAbe;
 
         diff  = fabs(delta - delta_old);
-    } while(diff > epsNum);
+    } while( (diff > epsNum) && NITS < 30 );
 //  Inversion of timing model by iteration: end of loop
 
 /*
