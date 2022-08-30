@@ -955,8 +955,8 @@ int locate_in_array(double value, double *array, int N)
 
     if (value == array[0])
         i = 0;
-    else if (value == array[N-1])
-        i = N-1;
+    else if (value >= array[N-1])
+        i = N-2;
     else
         i = i_left;
 
