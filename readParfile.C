@@ -2136,6 +2136,17 @@ void checkLine(pulsar *psr,char *str,FILE *fin,parameter *elong, parameter *elat
                     break; 
             }
         }
+        /* Reading parameters necessary for DDSTG model */
+        else if (strcasecmp(str,"ALPHA0")==0)
+            readValue(psr,str,fin,&(psr->param[param_alpha0]),0);
+        else if (strcasecmp(str,"BETA0")==0)
+            readValue(psr,str,fin,&(psr->param[param_beta0]),0);
+        else if (strcasecmp(str,"EOS")==0)
+            fscanf(fin,"%s",psr->eos_name);
+        else if (strcasecmp(str,"COMP_TYPE")==0)
+            fscanf(fin,"%s",psr->companion_type);
+
+
         /* Other allowed parameters that are unused */
         else if (str[0]=='C') /* Comment line */
             fgets(str,1000,fin);

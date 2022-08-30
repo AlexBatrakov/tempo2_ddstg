@@ -705,6 +705,12 @@ void initialiseOne (pulsar *psr, int noWarnings, int fullSetup)
             psr->constraint_special[k]=0;
         }
 
+    // Initinalize parameters for DDSTG model
+    strcpy(psr->param[param_alpha0].label[0],"ALPHA0"); 
+    strcpy(psr->param[param_alpha0].shortlabel[0],"ALPHA0");
+    strcpy(psr->param[param_beta0].label[0],"BETA0"); 
+    strcpy(psr->param[param_beta0].shortlabel[0],"BETA0");
+
 
 }
 

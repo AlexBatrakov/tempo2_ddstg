@@ -141,6 +141,8 @@ double t2FitFunc_binaryModels(pulsar *psr, int ipsr ,double x ,int ipos ,param_l
         afunc = DDSmodel(psr,0,ipos,label);
     else if (strcmp(psr->binaryModel,"DDGR")==0)
         afunc = DDGRmodel(psr,0,ipos,label);
+    else if (strcmp(psr->binaryModel,"DDSTG")==0)
+        afunc = DDSTGmodel(psr,0,ipos,label);     //DDSTG model
     else if (strcmp(psr->binaryModel,"MSS")==0)
         afunc = MSSmodel(psr,0,ipos,label);
     else if (strcmp(psr->binaryModel,"T2")==0)
@@ -176,6 +178,8 @@ void t2UpdateFunc_binaryModels(pulsar *psr, int ipsr ,param_label label,int k, d
         updateDDS(&psr[ipsr],val,error,label);
     else if (strcmp(psr[ipsr].binaryModel,"DDGR")==0)
         updateDDGR(&psr[ipsr],val,error,label);
+    else if (strcmp(psr[ipsr].binaryModel,"DDSTG")==0) //DDSTG model
+        updateDDSTG(&psr[ipsr],val,error,label);
     else if (strcmp(psr[ipsr].binaryModel,"MSS")==0)
         updateMSS(&psr[ipsr],val,error,label);
     else if (strcmp(psr[ipsr].binaryModel,"T2")==0)

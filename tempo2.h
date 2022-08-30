@@ -195,6 +195,7 @@ enum label {
     param_orbifunc,
     param_gltd2,param_gltd3, param_glf0d2, param_glf0d3,
     param_ne_sw_sin,param_ne_sw_ifunc,
+    param_alpha0, param_beta0, /*!< parameters necessary for DDSTG model */
     // ** ADD NEW PARAMETERS ABOVE HERE **
     // THE BELOW LINE MUST BE THE LAST LINE IN THIS ENUM
     param_LAST, /*!< Marker for the last param to be used in for loops  */
@@ -519,6 +520,15 @@ typedef struct pulsar {
     char rajStrPost[100],decjStrPost[100]; /*!< String containing RAJ and DECJ  (postfit)           */
     char binaryModel[100];                 /*!< Binary model e.g. BT/ELL1/BT2P etc.                        */
 
+    // Parameters necessary for DDSTG model
+    char companion_type[3];  /*!< The type of the companion star: NS, WD or BH                                    */
+    char eos_name[100];      /*!< The name for a equation of state used for objects internal structure            */
+    int ddstg_init;          /*!< The key parameter ensuring the completed initialization of ddst tables         */
+    int N_mA;                /*!< The lenght of arrays with DDST parameters; number of mass points          */
+    double *mA_array;
+    double *alphaA_array;
+    double *betaA_array;
+    double *kA_array;
 
     double **ToAextraCovar;
 
@@ -1053,6 +1063,9 @@ extern "C" {
     void updateELL1H( pulsar *psr, double val, double err, int pos );
     double ELL1kmodel( pulsar *psr, int p, int obs, int param );
     void updateELL1k( pulsar *psr, double val, double err, int pos );
+    // Batrakov (2022) DDSTG model:
+    double DDSTGmodel(pulsar *psr,int p,int obs,int param);
+    void updateDDSTG(pulsar *psr,double val,double err,int pos);
 
 
     void displayMsg(int type,const char *key,const char *searchStr,const char *variableStr,int noWarnings);

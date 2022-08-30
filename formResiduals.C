@@ -462,6 +462,7 @@ void formResiduals(pulsar *psr,int npsr,int removeMean)
                 else if (strcmp(psr[p].binaryModel,"DDS")==0)   torb = DDSmodel(psr,p,i,-1);
                 else if (strcmp(psr[p].binaryModel,"MSS")==0)   torb = MSSmodel(psr,p,i,-1);
                 else if (strcmp(psr[p].binaryModel,"DDGR")==0)  torb = DDGRmodel(psr,p,i,-1);
+                else if (strcmp(psr[p].binaryModel,"DDSTG")==0)  torb = DDSTGmodel(psr,p,i,-1); //DDSTG model
                 else if (strcmp(psr[p].binaryModel,"T2")==0)    torb = T2model(psr,p,i,-1,0);
                 else if (strcmp(psr[p].binaryModel,"T2-PTA")==0) torb = T2_PTAmodel(psr,p,i,-1,0);
                 else if( strcmp( psr[p].binaryModel, "DDH" ) == 0) torb = DDHmodel( psr, p, i, -1 );
