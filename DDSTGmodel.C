@@ -313,7 +313,7 @@ double DDSTGmodel(pulsar *psr,int p,int ipos,int param)
         brace  = onemecu - si*(sw*cume + sqr1me2*cw*su);
         if (brace<=0)
         {
-            printf("ERROR: In DDGR model, brace < 0\n");
+            printf("ERROR: In DDSTG model, brace < 0\n");
             exit(1);
         }
         dlogbr = log(brace);
