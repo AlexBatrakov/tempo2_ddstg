@@ -712,7 +712,7 @@ void DEF_tables_load(DEF_tables *tables)
 
     printf("eosName = %s\n", tables->eosName);
 
-    sprintf(fileName,"%s/ddstg_data/%s/dims.dat", getenv(TEMPO2_ENVIRON), tables->eosName);
+    sprintf(fileName,"%s/data_ddstg/%s/dims.dat", getenv(TEMPO2_ENVIRON), tables->eosName);
 
     printf("Reading from %s\n", fileName);
     file = fopen(fileName, "r");
@@ -728,7 +728,7 @@ void DEF_tables_load(DEF_tables *tables)
     tables->alpha0_table = (double *)malloc(N_alpha0 * sizeof(double));
     tables->beta0_table = (double *)malloc(N_beta0 * sizeof(double));
 
-    sprintf(fileName,"%s/ddstg_data/%s/alpha0.dat", getenv(TEMPO2_ENVIRON), tables->eosName);
+    sprintf(fileName,"%s/data_ddstg/%s/alpha0.dat", getenv(TEMPO2_ENVIRON), tables->eosName);
     printf("Reading from %s\n", fileName);
     file = fopen(fileName, "r");
     for (int i = 0; i < N_alpha0; i++) {
@@ -736,7 +736,7 @@ void DEF_tables_load(DEF_tables *tables)
     }
     fclose(file);
 
-    sprintf(fileName,"%s/ddstg_data/%s/beta0.dat", getenv(TEMPO2_ENVIRON), tables->eosName);
+    sprintf(fileName,"%s/data_ddstg/%s/beta0.dat", getenv(TEMPO2_ENVIRON), tables->eosName);
     printf("Reading from %s\n", fileName);
     file = fopen(fileName, "r");
     for (int i = 0; i < N_beta0; i++) {
@@ -756,16 +756,16 @@ void DEF_tables_load(DEF_tables *tables)
 //  free_3Darray(tables->betaA_table, N_alpha0, N_beta0, N_mA);
 //  free_3Darray(tables->kA_table, N_alpha0, N_beta0, N_mA);
 
-    sprintf(fileName,"%s/ddstg_data/%s/massA.dat", getenv(TEMPO2_ENVIRON), tables->eosName);
+    sprintf(fileName,"%s/data_ddstg/%s/massA.dat", getenv(TEMPO2_ENVIRON), tables->eosName);
     read_3Darray(fileName, tables->mA_table, N_alpha0, N_beta0, N_mA);
 
-    sprintf(fileName,"%s/ddstg_data/%s/alphaA.dat", getenv(TEMPO2_ENVIRON), tables->eosName);
+    sprintf(fileName,"%s/data_ddstg/%s/alphaA.dat", getenv(TEMPO2_ENVIRON), tables->eosName);
     read_3Darray(fileName, tables->alphaA_table, N_alpha0, N_beta0, N_mA);
 
-    sprintf(fileName,"%s/ddstg_data/%s/betaA.dat", getenv(TEMPO2_ENVIRON), tables->eosName);
+    sprintf(fileName,"%s/data_ddstg/%s/betaA.dat", getenv(TEMPO2_ENVIRON), tables->eosName);
     read_3Darray(fileName, tables->betaA_table, N_alpha0, N_beta0, N_mA);
 
-    sprintf(fileName,"%s/ddstg_data/%s/kA.dat", getenv(TEMPO2_ENVIRON), tables->eosName);
+    sprintf(fileName,"%s/data_ddstg/%s/kA.dat", getenv(TEMPO2_ENVIRON), tables->eosName);
     read_3Darray(fileName, tables->kA_table, N_alpha0, N_beta0, N_mA);
 
 //  for (int i = 0; i < N_mA; i++) {
