@@ -72,7 +72,7 @@ double DDSTGmodel(pulsar *psr,int p,int ipos,int param)
     double bare_m, bare_m1, bare_m2;
     double dk_dm, dk_dm2, dgamma_dm, dgamma_dm2, dsi_dm, dsi_dm2, ddr_dm, ddr_dm2, ddth_dm, ddth_dm2, dpbdot_dm, dpbdot_dm2, ddt_dm, ddt_dm2;
     double epsNum, tt, frb, delta, delta_old, diff, ae1, cae, sae, psi, cpsi, spsi, dRoe, dEin, dSha, dAbe;
-    int NITS;
+    int loop_counter1, loop_counter2;
 
     if (displayCVSversion == 1) CVSdisplayVersion("DDSTGmodel.C","DDSTGmodel()",CVS_verNum);
 
@@ -189,29 +189,29 @@ double DDSTGmodel(pulsar *psr,int p,int ipos,int param)
     eth = ecc*(1.0+dth);
 
 //----------------------------------------------------------------------------------------
-
+/*
     orbits = tt0/pb - 0.5*(pbdot+xpbdot)*pow(tt0/pb,2);
     //  printf("xpbdot = %.14g %.14g\n",(double)xpbdot/1e-12,(double)orbits);
     norbits = (int)orbits;
     if (orbits<0.0) norbits--;
     phase=2.0*M_PI*(orbits-norbits);
-    /*  Compute eccentric anomaly u by iterating Kepler's equation. */
+    //  Compute eccentric anomaly u by iterating Kepler's equation.
     u=phase+ecc*sin(phase)*(1.0+ecc*cos(phase));
 
     do {
         
-    	fac = 1.0/(1.0-ecc*cos(u));  /* NOTE COULD BE WRONG IN DDmodel - SEE USE OF FAC !!!! */
+    	fac = 1.0/(1.0-ecc*cos(u));  // NOTE COULD BE WRONG IN DDmodel - SEE USE OF FAC !!!!
 	du=(phase-(u-ecc*sin(u)))*fac; 
         u=u+du;
    	
-    } while (fabs(du)>1.0e-14);  /* 1e-12 in DDmodel */
+    } while (fabs(du)>1.0e-14);  // 1e-12 in DDmodel
 
-    /*  DD equations 17a, 29 */
+    //  DD equations 17a, 29
     ae = 2.0*atan(sqrt((1+ecc)/(1-ecc))*tan(0.5*u));
     if(ae<0.0) ae=ae+2.0*M_PI;
     ae = 2.0*M_PI*orbits + ae-phase;
     omega=omz/rad2deg + (k+xomdot/(an*rad2deg*365.25*86400.0))*ae;
-    /* DD equations 46 through 52 */
+    // DD equations 46 through 52
     su=sin(u);
     cu=cos(u);
     sw=sin(omega);
@@ -225,7 +225,7 @@ double DDSTGmodel(pulsar *psr,int p,int ipos,int param)
     onemecu=1.0-ecc*cu;
     anhat=an/onemecu;
 
-    /* DD equations 26,27,57 */
+    // DD equations 26,27,57
 
     cume=cu-ecc;
     sqr1me2=sqrt(1-pow(ecc,2));
@@ -238,34 +238,32 @@ double DDSTGmodel(pulsar *psr,int p,int ipos,int param)
     dlogbr=log(brace);
     ds=-2*bare_m2*dlogbr; //change m2 to bare_m2
 
-    /* These will be different if spin axis not aligned -- IS THIS AN ASSUMPTION OF THE MODEL? */
+    // These will be different if spin axis not aligned -- IS THIS AN ASSUMPTION OF THE MODEL?
     a0aligned = an*ar/(2.0*M_PI*f0*si*sqr1me2);
     a0 = afac*a0aligned;
     b0 = 0.0;
     da = a0*(sin(omega+ae)+ecc*sw) + b0*(cos(omega+ae) + ecc*cw);
 
 
-    /*  Now compute d2bar, the orbital time correction in DD equation 42. */
+    //  Now compute d2bar, the orbital time correction in DD equation 42.
     d2bar=dre*(1-anhat*drep+(pow(anhat,2))*(pow(drep,2) + 0.5*dre*drepp -
                 +    0.5*ecc*su*dre*drep/onemecu)) + ds + da;
     torb=-d2bar;
 
-/*
+
     printf("Comparison inversion DDGR vs DDSTG");
     printf("DDGR ae: \n%.17g\n", ae);
     printf("DDGR omega: \n%.17g\n", omega);
     printf("DDGR torb: \n%.17g\n", torb);
 */
-
-
 //----------------------------------------------------------------------------------------
 
     epsNum = 1.0e-10;
     delta  = 0.0;
-    NITS = 0;
+    loop_counter1 = 0;
     do
     {   
-        NITS += 1;
+        loop_counter1 += 1;
         delta_old = delta;        
         tt  = tt0 - delta;
         orbits = tt*frb - 0.5*(pbdot+xpbdot)*pow(tt*frb,2);
@@ -275,11 +273,12 @@ double DDSTGmodel(pulsar *psr,int p,int ipos,int param)
 
 //  Compute eccentric anomaly u by iterating Keplers equation.
         u=phase+ecc*sin(phase)*(1+ecc*cos(phase));
-
+        loop_counter2 = 0;
         do {
+            loop_counter2 += 1;
             du=(phase-(u-ecc*sin(u)))/(1.0-ecc*cos(u));
             u=u+du;
-        } while (fabs(du)>1.0e-14);  // 1e-12 in DDmodel
+        } while (fabs(du)>1.0e-14 && loop_counter2 < 30);  // 1e-12 in DDmodel
 
 //  DD equations 17b, 17c, 29, and 46 through 52
         su=sin(u);
@@ -333,7 +332,7 @@ double DDSTGmodel(pulsar *psr,int p,int ipos,int param)
         delta = dRoe + dEin + dSha + dAbe;
 
         diff  = fabs(delta - delta_old);
-    } while( (diff > epsNum) && NITS < 30 );
+    } while( (diff > epsNum) && loop_counter1 < 30 );
 //  Inversion of timing model by iteration: end of loop
 
 /*
